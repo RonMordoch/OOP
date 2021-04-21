@@ -1,0 +1,148 @@
+mordoch.ron
+
+
+==========================
+=      Submitted Files   =
+==========================
+ex5.jar contains:
+
+README
+package filesprocessing:
+    DirectoryProcessor.java
+    InvalidUsageException.java
+    Sorter.java
+
+    package section:
+        Parser.java
+        ParserException.java
+        Section.java
+
+    package filter:
+    Filter.java
+    AllFilter.java
+    FilterDecorator.java
+    FilterException..java
+    FilterFactory..java
+
+        package filenamefilters:
+        ContainsFilter.java
+        FileFilter.java
+        FileNameFilter.java
+        PrefixFilter.java
+        SuffixFilter.java
+
+        package permissionfilters:
+        ExecutableFilter.java
+        HiddenFilter.java
+        PermissionFilter.java
+        PermissionFilterException.java
+        WritableFilter.java
+
+        package sizefilters:
+        BetweenFilter.java
+        BetweenFilterException.java
+        GreaterThanFilter.java
+        NegativeSizeException.java
+        SizeFilter.java
+        SmallerThanFilter.java
+
+    package order:
+    AbsOrder.java
+    Order.java
+    OrderDecorator.java
+    OrderException.java
+    OrderFactory.java
+    SizeOrder.java
+    TypeOrder.java
+
+
+========================================
+=   Design & Implementation Details    =
+========================================
+
+The program is divided into the following main components:
+filter package
+order package
+parser
+section
+sorter
+directory processor which contains main
+
+The filter package consists of Filter, an interface which has a method that returns true or false according
+to the file's fulfilment of the filter's conditions.
+We have 3 abstract Filters which implements this interface directly according to a common characteristic
+- FileNameFilter, PermissionFilter, SizeFilters, each has their own sub-classes that has the specific
+implementation of the common filter value, and thus by inheritance they implement the interface as well.
+The default AllFilter which returns true always implements the interface directly due to its naive nature.
+For negation I used a decorator class, which receives a filter and returns the opposite value of the
+filter's filterFile method
+FilterFactory, as taught in lectures, is a single factory class which is responsible for creating the
+filters. It has a method that creates the default AllFilter so the program won't have to check all switch
+cases of the createFilter method every time we need to create the default filter.
+For managing exception in the filter package, I have the FilterException which extends Exception directly,
+and exception that inherit from it : PermissionFilterException for values other than YES/NO,
+NegativeSizeException for negative values in size filters, BetweenFilterException for illegal values in
+BetweenFilter.
+
+The order package operates similarly.
+Order is an interface which extended java's Comparator on File objects.
+It has an overridden method for comparing which returns -1,0,1 according to the order's comparing rule.
+In case of equality, TypeOrder and SizeOrder will compare by the default AbsOrder, which each of them hold
+as a private data member.
+For reversing, order decorator works the same way as the filter decorator, and returns the opposite values,
+i.e. for -1/0/1 it will return 1/0/-1.
+OrderFactory is also same as FilterFactory, operating in the same way by having a default method for
+creating the default AbsOrder and the createOrder method behaves similarly.
+OrderException is thrown in case of invalid order .
+
+In the section package we have the Section class, which represents a section that have its own filter name,
+order name and the line where it begins. Section has methods to return the line of the filter name and order
+name, if they exist, i.e. if they are not the default lines due to type 1 errors.
+
+The Parser class is responsible for parsing and iterating over the commands file, creating the section and
+returning an array list of all sections in commands file.
+In case of invalid format of the commands file, Parser throws ParserException which is a Type 2 error, caught
+later in DirectoryProcessor.
+
+In the main package:
+
+Sorter is a modified implementation of the quick sort algorithm which was implemented in a way that allows
+it to compare File objects, rather than integers as we've previously seen.
+
+And finally, DirectoryProcessor which is the all-mighty class of this program.
+InvalidUsageException is thrown in case of invalid arguments input, empty sourceDir, or invalid commands file.
+The getFilesInDir method returns an array list of all files in sourceDir.
+The parseSection method attempt to create an array list of sections using parser on the command file.
+In case of ParserException, invalid structure of command file, or IO exception, invalid command file,
+informative error messages are printed.
+Else, we have a valid sections array list. we iterate over each section and call the sectionManager method,
+which creates the filter and order objects for the current section, and if any Type 1 error occurred it is
+caught here and default filter/order are created. at last, we filter the files using the filter, order using
+the order and sorter method, and after printing the Type 1 errors (if such existed) , we print the name of
+files.
+filterFiles receives an array list of files and a Filter object and returns the filtered array list of files.
+validateArguments checks for the correct number of arguments sent to the program. If invalid number of
+arguments was received, it throws an InvalidUsageException.
+
+The main method works the following way:
+under a try block we attempt to validate the arguments, we create new file objects of sourceDir and
+commands file, get files in sourceDir and then we call the parseMethod function.
+Else we catch the InvalidUsageException and print the error message detailing that more than 2 arguments
+were received. Catching this error here allows us to print the other error messages separately.
+
+=============================
+=    Answers To Questions   =
+=============================
+===============
+=    Extras   =
+===============
+In addition to lecture notes and TAs, I used the following online resources:
+
+https://en.wikipedia.org/wiki/Quicksort
+https://docs.oracle.com/javase/7/docs/api/java/io/BufferedReader.html
+https://docs.oracle.com/javase/7/docs/api/java/io/FileReader.html
+https://docs.oracle.com/javase/7/docs/api/java/lang/String.html
+https://docs.oracle.com/javase/7/docs/api/java/io/File.html
+https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html
+https://www.tutorialspoint.com/design_pattern/decorator_pattern.htm
+

@@ -1,0 +1,59 @@
+-hidden-
+
+
+=============================
+=      File description     =
+=============================
+SpaceShip.java
+SpaceShipFactory.java
+HumanSpaceShip.java
+RunnerSpaceShip.java
+BasherSpaceShip.java
+AggressiveSpaceShip.java
+DrunkardSpaceShip.java
+SpecialSpaceShip.java
+
+=============================
+=   Design & Implementation details    =
+=============================
+I chose to make SpaceShip an abstract super class, which implements the API, and from which all the 
+other types of ship will extend.
+Also, by exercise definition we always make specfic types of spaceships, thus, abstract class.
+This is due to the fact that all ships have the same behaviour , but are different in the following actions:
+ (as detailed in the method doAction)
+1. Teleportartion 2. Acceleration 3. Turning 4.Shield activation 5. Firing
+
+Therefore, I defined 5 "checkers", that returns false as a basic setting.
+If any one those checker-methods return true, the ship will perform the matching action.
+Each ship has an overriding method to set its special behaviour according to the actions.
+Making the "checkers" return false by method makes it easy, and we only need to implement the methods that are
+ relevant for this class.
+For example, the BasherSpaceShip never fires, so having it set by default reduce unnecessary code.
+
+This model makes extensibility pretty much straight-forward and easy, we can make new space ships and only
+ define whatever special
+behaviour we want to implement for them.
+
+Modularity is also visible in the minimal API required for a SpaceShip, and how the model of the different
+ "checkers" methods can make 
+it easier to understand the distinict behaviour of the different kinds of ship.
+
+I added 2 data members - a boolean variable representing whether cooldown is on/off, and an int variable 
+representing the current cooldown.
+To use those I added 2 methods, one that manages cooldown (reduces cooldown by 1 every round),
+ and if cooldown has reached 0, it will call the
+second method, which turn of cooldown.
+Also another method that increase ship's energy by one every round.
+
+Overall, I find my code to be pretty self-explanatory, organized and minimal.
+
+
+=============================
+=    Answers to questions   =
+=============================
+DrunkardSpaceShip - This ship's driver is quite intoxicated, making him afraid of what ever he sees in sight.
+Thus, he drowns into panic, running away from the closest ship's he spots, and consistently fire in his own stupor.
+
+SpecialSpaceShip -  This ship will chase the closest spaceship. It will always have it shield on, except when it is close
+ enough to another ship. If it gets closer , it will also start firing.It will randomly accelerate in order to make firing
+ at it more challenging.

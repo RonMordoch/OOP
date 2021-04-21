@@ -1,0 +1,96 @@
+mordoch.ron
+
+
+==========================
+=      Submitted Files   =
+==========================
+ex4.jar contains:
+
+SimpleHashSet.java
+OpenHashSet.java
+ClosedHashSet.java
+LinkedListWrapper.java
+CollectionFacadeSet.java
+SimpleSetPerformanceAnalyzer.java
+RESULTS
+README
+
+
+========================================
+=   Design & Implementation Details    =
+========================================
+SimpleHashSet defines the constants and data members, and implements some of the methods.
+All of the constructors for Open/Closed-HashSet are handled using the SimpleHashSet constructors.
+There are 4 additional protected methods, 2 which handles increasing/decreasing the capacity (table size),
+and 2 which checks if resizing is necessary before adding an item / after removing an item.
+
+OpenHashSet is implemented using an array of LinkedLists wrapped by the LinkedListWrapper class.
+Why I choose this option? except having it suggested in the exercise description, during the work flow
+I started with the open and closed hash sets and only then moved to implement the CollectionFacadeSet, which
+ultimately operates the same as the wrapper class, except I could'nt define a getter class there, and I found
+using for-each loops better at run time then for-i loops + get(i), and much clearer to understand code-wise.
+
+Both OpenHashSet and ClosedHashSet have 2 methods, rehashManager and rehashTable, that take care of the
+process of resizing the table and rehashing the elements. Their code is very much similar, unfortunately I
+could not find a viable solution to make them abstract in order to reuse code, as we are dealing with
+different type of objects in each class.
+Those methods are passed an indicator int, representing whether to increase or decrease table.
+
+ClosedHashSet delete operation is handled by replacing the deleted value with a general object, turned into
+string by Object.toString(). One we found the element, we delete it by replacing it with the mentioned
+string.
+Since contains is a method that returns a boolean value, and we still need the index to delete the value,
+I added a function that returns the an int, the index of the value, if found.
+Then, using an indicator int, which is -1 and defined by a constant, I check if the index that was found
+is valid. This helps when deleting the value, and reuses the for-loop's code instead of writing it twice.
+
+=============================
+=    Answers To Questions   =
+=============================
+Performance analysis:
+
+1. data1 contains 99,999 words with the same hash code, showing us the difference between open and closed
+hashing:
+
+OpenHashSet took quite some time to add all the elements of data1 to its table, but still less than
+ClosedHahSet, this is because in each collision, we just concatenate the elements using LinkedList mechanism,
+which runs better.
+
+ClosedHashSet took much longer than the already long time it took OpenHashSet, due to the high number of
+collisions between the elements. That's A LOT of for loops.
+
+2.
+OpenHashSet - Adding data1 took a lot of time due to the high number of collision, but less than
+ClosedHashSet took with the same data1 because of the nature of LinkedList's chaining mechanism.
+The contain methods were somewhat fine, except for searching the negative value which is not contained
+in data 1, that forced us to iterate over all of our wrapped LinkedLists, which, as can be seen in the
+results, took a considerable amount of time.
+
+ClosedHashSet - Adding data1 took much longer than OpenHashSet, which already took a lot of time, due to the
+high number of collision, but performed well for adding data2. Also, for containing elements, ClosedHashSet
+performed much worse than OpenHashSet.
+
+TreeSet - Took an average amount of time for all operations, not much can be said due to the lack of
+understanding how this structure works.
+
+LinkedList - Performed better than our HashSets for adding items,  but performed terribly on most contain
+operations.
+
+HashSet - DING DING DING - The jack of all trades, Java's own hashSet implementation took the shortest
+ amount of time for generally all operations, not a surprise. This is probably due to an intelligent algorithm
+ that matches the hashing to the type of the data, for example, if a certain number of collisions occurred,
+ java will change the hash function.
+
+To summarize - Don't use linked lists for containing operations, openHashSet performs well for adding, and
+better for contain operations on average than closedHashSet, but ultimately, java's HashSet is better all
+around.
+
+===============
+=    Extras   =
+===============
+I used for following online resources:
+
+https://en.wikipedia.org/wiki/Hash_table
+https://docs.oracle.com/javase/7/docs/api/java/util/LinkedList.html
+https://docs.oracle.com/javase/7/docs/api/java/io/Reader.html
+

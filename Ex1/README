@@ -1,0 +1,37 @@
+mordoch.ron
+
+
+=============================
+=      File description     =
+=============================
+Book.java - contains the methods for a book object.
+Patron.java - contains the methods for a patron object.
+Library.java - implements the library class, which manages a library system using
+book objects and patron objects.
+
+=============================
+=          Design           =
+=============================
+Library class manages the interactions between books and patrons, while
+following set rules for the libray, e.g. maximum number of books allowed to be borrowed
+by a single patron registered to the library.
+
+=============================
+=  Implementation details   =
+=============================
+For keeping track of bookIds and patronIds, I used arrays, one for book objects
+and one for patron objects. The Ids for each book ( or patron ) are the index in which
+they appear in the list.
+Also, in order to keep track of how many book a patron is currently borrowing, I added
+a member, a list of int, that represents the current number of books borrowed by a patron,
+when their indexes are their ids, 
+and 2 methods - a getter for the number and a method that adds a given amount, which is 
+called in the library class with th number 1, -1 for borrowing and returning books respectively.
+At first I thought of adding an int member numOfBooksBorrowed for the Patron class, but
+after thinking about it properly I figured that this would cause complications when the same
+patron is registered to different libraries.
+
+=============================
+=    Answers to questions   =
+=============================
+N/A

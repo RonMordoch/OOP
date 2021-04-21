@@ -1,0 +1,58 @@
+mordoch.ron
+
+
+=============================
+=      File description     =
+=============================
+ex3.jar contains:
+
+AbstractStorage.java
+Locker.java
+LongTermStorage.java
+LockerTest.java
+LongTermTest.java
+SpaceshipDepositoryTest.java
+BoopingSite.java
+BoopingSiteTest.java
+
+=============================
+=   Design & Implementation details    =
+=============================
+Part 1 - USS
+Explanation for Locker and LongTermStorage implementation:
+
+I chose to build an abstract storage class.
+I choose this over interface. 
+As learned in the lectures, interface talks about what and not about how,
+however the main differences in Locker and LongTermStorage are HOW addItem
+method works, therefore, abstract class.
+The abstract class implements all methods except adding and removing items, which
+are implemented uniquely in Locker and LongTermStorage.
+I also added a static variable for Locker, which is the unique LongTermStorage 
+shared among all Lockers on the USS.
+
+Part 2 - BoopingSite
+Due to limitations of the typical Java array, and the fact that we have not
+learned so far advanced 'techniques' in sorting and manipulating arrays,
+I decided to use ArrayList which has similiarities to Python's lists.
+For that functionallity I added a method to convert between arrays and arraylists,
+as exercise requires us to return typical java arrays.
+
+getHotelsInCityByRating:
+I created a method to find all hotels within a given city in the dataset.
+Then I sort by using a comparator with an ovverriden method that compares by
+star rating, and if star ratings are equal, compares by alphabetical order.
+
+getHotelsByProximity & getHotelsInCityByProximity
+First, I added a method to compare the euclidean distance between a given
+set of coordinates and an object of Hotel type.
+Then, I created another helper function with receives a set of coordinates and 
+an array of Hotel objects, checks for the legality of the input, and if the input is legal,
+the method, using a locally defined comparator, sorts the array by distance.
+If distances are equal, the array is sorted between number of points of interest.
+
+For the implementation of the HotelsByProximity I return the helper sorting function
+executed on the array containing all hotels in data set.
+
+For the implementation of the HotelsByProximity I return the helper sorting function
+executed on the array containing all hotels in data set within the given city.
